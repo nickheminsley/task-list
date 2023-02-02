@@ -1,6 +1,5 @@
 package com.example.tasklist.task;
 
-import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,19 +16,14 @@ public class TaskListRepository {
   }
 
   List<TaskList> getAllTaskLists() {
-    return namedParameterJdbcTemplate.query(
-        "SELECT * FROM TASK_LIST;",
-        new MapSqlParameterSource(),
+    return namedParameterJdbcTemplate.query("SELECT * FROM TASK_LIST;", new MapSqlParameterSource(),
         (rs, rowNum) -> new TaskList(rs.getInt("id"), rs.getString("title"),
-            getAllTasksForAList(rs.getInt("id")))
-    );
+            getAllTasksForAList(rs.getInt("id"))));
   }
 
   List<Task> getAllTasksForAList(int listId) {
-    return namedParameterJdbcTemplate.query(
-        "SELECT * FROM TASK WHERE list_id=:listId;",
+    return namedParameterJdbcTemplate.query("SELECT * FROM TASK WHERE list_id=:listId;",
         new MapSqlParameterSource("listId", listId),
-        (rs, rowNum) -> new Task(rs.getString("task"), rs.getBoolean("complete"))
-    );
+        (rs, rowNum) -> new Task(rs.getString("task"), rs.getBoolean("complete")));
   }
 }
